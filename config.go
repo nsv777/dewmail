@@ -64,3 +64,8 @@ const OptSPFAPI string = ""
 
 // API key for SPF validation system
 const OptSPFAPIKey string = ""
+
+// Headers to be added to HTTP request
+const OptHTTPHeaders = map[string]string{
+    "some_header": "some_value",
+}

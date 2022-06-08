@@ -67,6 +67,12 @@ func BuildJSONRequest(reqType string, url string, content []byte) (string, error
 	// Set request headers
 	request.Header.Set("Content-Type", "application/json")
 
+    // Set Additional headers if any
+    for _, header_key := range OptHTTPHeaders {
+        header_value := OptHTTPHeaders[header_key]
+        request.Header.Set(header_value, header_key)
+    }
+
 	// Initiate HTTP client
 	clientHandler := &http.Client{
 		Transport: &http.Transport{
