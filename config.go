@@ -66,6 +66,6 @@ const OptSPFAPI string = ""
 const OptSPFAPIKey string = ""
 
 // Headers to be added to HTTP request
-const OptHTTPHeaders = map[string]string{
+var OptHTTPHeaders = map[string]string{
     "some_header": "some_value",
 }
