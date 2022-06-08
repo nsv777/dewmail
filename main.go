@@ -30,7 +30,6 @@ import (
 	"net"
 	"net/http"
 	"os"
-	"time"
 
 	"github.com/bradfitz/go-smtpd/smtpd"
 )
