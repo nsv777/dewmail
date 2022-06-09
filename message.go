@@ -61,12 +61,20 @@ type Message struct {
 
 // Getter of path
 func (m *Message) GetPath() string {
-	return m.spath
+	if spath_replace, ok := OptReplacePath[m.spath]; ok {
+		return spath_replace
+	} else {
+		return m.spath
+	}
 }
 
 // Getter of domain
 func (m *Message) GetDomain() string {
-	return m.sdomain
+	if sdomain_replace, ok := OptReplaceDomain[m.sdomain]; ok {
+		return sdomain_replace
+	} else {
+		return m.sdomain
+	}
 }
 
 // Add recipient method for Message types

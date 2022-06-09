@@ -1,8 +1,8 @@
 /*
  * The MIT License (MIT)
- * 
+ *
  *  Copyright (c) 2014 Stephen Parker (withaspark.com)
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -11,7 +11,7 @@
  * furnished to do so, subject to the following conditions:
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *  
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,8 +22,6 @@
  */
 
 package main
-
-import ()
 
 // Domain validation checks.
 // If true, will enforce only accepting mail for specific domains in
@@ -67,5 +65,15 @@ const OptSPFAPIKey string = ""
 
 // Headers to be added to HTTP request
 var OptHTTPHeaders = map[string]string{
-    "some_header": "some_value",
+	"some_header": "some_value",
+}
+
+// Optionally replace domain, to send message to different domain
+var OptReplaceDomain = map[string]string{
+	"some.domain": "some.another.domain",
+}
+
+// Optionally replace path which should be used in HTTP request
+var OptReplacePath = map[string]string{
+	"/some/path/": "/some/another/path/",
 }

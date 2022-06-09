@@ -1,8 +1,8 @@
 /*
  * The MIT License (MIT)
- * 
+ *
  *  Copyright (c) 2014 Stephen Parker (withaspark.com)
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -11,7 +11,7 @@
  * furnished to do so, subject to the following conditions:
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *  
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -39,7 +39,7 @@ func main() {
 	var sLogFile string = "logs/dewmail.log"
 	fpLog, err := os.OpenFile(sLogFile, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
-		log.Fatal("Error opening/creating logfile %v", err)
+		log.Fatal("Error opening/creating logfile ", err)
 	}
 	defer fpLog.Close()
 	log.SetOutput(fpLog)
@@ -49,7 +49,7 @@ func main() {
 
 	// Start listener on HTTP port so we can use pinging services to verify service up
 	http.HandleFunc("/", HandleHTTP)
-	go http.ListenAndServe(":" + OptHTTPPort, nil)
+	go http.ListenAndServe(":"+OptHTTPPort, nil)
 
 	// Start listener on SMTP port
 	var SMTPOptions = flag.String("smtp", ":25", "")
