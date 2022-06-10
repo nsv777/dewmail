@@ -67,7 +67,7 @@ func BuildJSONRequest(reqType string, url string, content []byte) (string, error
 	// Set Additional headers if any
 	for header_key := range OptHTTPHeaders {
 		header_value := OptHTTPHeaders[header_key]
-		request.Header.Set(header_value, header_key)
+		request.Header.Set(header_key, header_value)
 	}
 
 	// Display/log request for debugging
