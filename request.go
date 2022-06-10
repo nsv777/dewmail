@@ -1,8 +1,8 @@
 /*
  * The MIT License (MIT)
- * 
+ *
  *  Copyright (c) 2014 Stephen Parker (withaspark.com)
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -11,7 +11,7 @@
  * furnished to do so, subject to the following conditions:
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -61,17 +61,18 @@ func BuildJSONRequest(reqType string, url string, content []byte) (string, error
 		return "", fmt.Errorf("Failed to build request. %v", err)
 	}
 
-	// Display/log request for debugging
-	log.Printf("Request: [%s] %s", url, content)
-
 	// Set request headers
 	request.Header.Set("Content-Type", "application/json")
 
-    // Set Additional headers if any
-    for _, header_key := range OptHTTPHeaders {
-        header_value := OptHTTPHeaders[header_key]
-        request.Header.Set(header_value, header_key)
-    }
+	// Set Additional headers if any
+	for _, header_key := range OptHTTPHeaders {
+		header_value := OptHTTPHeaders[header_key]
+		request.Header.Set(header_value, header_key)
+	}
+
+	// Display/log request for debugging
+	log.Printf("Request: [%s] %s", url, content)
+	log.Printf("Request header: [%s]", request.Header)
 
 	// Initiate HTTP client
 	clientHandler := &http.Client{
@@ -98,4 +99,3 @@ func BuildJSONRequest(reqType string, url string, content []byte) (string, error
 
 	return string(body), nil
 }
-
