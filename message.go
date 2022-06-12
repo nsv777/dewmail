@@ -172,6 +172,9 @@ func (m *Message) parse(r io.Reader) error {
 				return errors.New("Error: No text/plain formatting of message.")
 			}
 		}
+	} else {
+		// not a multistring email
+		m.Body = tempbuf.String()
 	}
 
 	// Extract URLs from body
