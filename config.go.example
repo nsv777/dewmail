@@ -42,6 +42,9 @@ const OptAPIRoute string = "/"
 // Use HTTPS for POST request to API
 const OptToHTTPS bool = false
 
+// Whether to send messages also to some backend datastore
+const OptDataStore bool = false
+
 // URL to backend datastore. All messages for all domains will be POSTed here as well.
 const OptDataStoreUrl string = ""
 

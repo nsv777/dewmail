@@ -1,8 +1,8 @@
 /*
  * The MIT License (MIT)
- * 
+ *
  *  Copyright (c) 2014 Stephen Parker (withaspark.com)
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -11,7 +11,7 @@
  * furnished to do so, subject to the following conditions:
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -64,46 +64,47 @@ func (a *action) Do() error {
 	// Make call to API
 	BuildJSONPost(a.url, a.body)
 
-	// Push record to global datastore
-	BuildJSONPost(OptDataStoreUrl, a.body)
+	if OptDataStore {
+		// Push record to global datastore
+		BuildJSONPost(OptDataStoreUrl, a.body)
 
-	// Get mailsSent counter from global datastore
-	sMailsSent, getCountErr := BuildJSONGet(OptDataStoreCountUrl, nil)
-	if getCountErr != nil {
-		return fmt.Errorf("Error: Failed to get count of mails sent. %v", getCountErr)
-	}
+		// Get mailsSent counter from global datastore
+		sMailsSent, getCountErr := BuildJSONGet(OptDataStoreCountUrl, nil)
+		if getCountErr != nil {
+			return fmt.Errorf("Error: Failed to get count of mails sent. %v", getCountErr)
+		}
 
-	// Get current count of mails sent
-	var MailsSent map[string]int
-	unmarshErr := json.Unmarshal([]byte(sMailsSent), &MailsSent)
-	if unmarshErr != nil {
-		return fmt.Errorf("Error: Failed to unmarshal mailsSent. %v", unmarshErr)
-	}
-
-	// Update mailsSent count in global datastore, try iMaxRetries times
-	var updateCountErr error
-	var sUpdateResp string
-	var UpdateResp map[string]int
-	const iMaxRetries int = 100
-	for iRetries := 1; iRetries <= iMaxRetries; iRetries++ {
-		// Send patch queries until we have incremented the count
-		// The backend datastore will return an error json response if new value isn't greater than old
-		sUpdateResp, updateCountErr = BuildJSONPatch(OptDataStoreCountUrl, []byte(fmt.Sprintf(`{"count": %d}`, MailsSent["count"]+iRetries)))
-		unmarshErr := json.Unmarshal([]byte(sUpdateResp), &UpdateResp)
+		// Get current count of mails sent
+		var MailsSent map[string]int
+		unmarshErr := json.Unmarshal([]byte(sMailsSent), &MailsSent)
 		if unmarshErr != nil {
-			return fmt.Errorf("Error: Failed to unmarshal mails sent count update. %v", unmarshErr)
+			return fmt.Errorf("Error: Failed to unmarshal mailsSent. %v", unmarshErr)
 		}
 
-		// Was a count response returned
-		if _, success := UpdateResp["count"]; success {
-			updateCountErr = nil
-			break
-		} else {
-			updateCountErr = fmt.Errorf("Error: Failed to update sent mail count")
-			continue
+		// Update mailsSent count in global datastore, try iMaxRetries times
+		var updateCountErr error
+		var sUpdateResp string
+		var UpdateResp map[string]int
+		const iMaxRetries int = 100
+		for iRetries := 1; iRetries <= iMaxRetries; iRetries++ {
+			// Send patch queries until we have incremented the count
+			// The backend datastore will return an error json response if new value isn't greater than old
+			sUpdateResp, updateCountErr = BuildJSONPatch(OptDataStoreCountUrl, []byte(fmt.Sprintf(`{"count": %d}`, MailsSent["count"]+iRetries)))
+			unmarshErr := json.Unmarshal([]byte(sUpdateResp), &UpdateResp)
+			if unmarshErr != nil {
+				return fmt.Errorf("Error: Failed to unmarshal mails sent count update. %v", unmarshErr)
+			}
+
+			// Was a count response returned
+			if _, success := UpdateResp["count"]; success {
+				updateCountErr = nil
+				break
+			} else {
+				updateCountErr = fmt.Errorf("Error: Failed to update sent mail count")
+				continue
+			}
 		}
+		return updateCountErr
 	}
-
-	return updateCountErr
+	return nil
 }
-
